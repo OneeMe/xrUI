@@ -7,29 +7,38 @@
 
 import SwiftUI
 
-protocol ARContent {
-    var name: String { get };
-}
-
-struct Model: ARContent {
-    var name: String
-    
-    init() {
-        self.name = "model"
+protocol XREntity: XRComponent {
+    var ThisEntity: XREntity {
+        get {
+            self
+        }
     }
 }
 
+protocol XRComponent {
+    var ThisEntity: XREntity { get }
+}
+
+protocol ModelComponent: XRComponent {
+    
+    func modelName() -> some XREntity {
+        return
+    }
+}
+
+struct Model: XREntity {}
+
 @resultBuilder
 struct ARContentBuilder {
-    static func buildBlock(_ parts: ARContent...) -> [ARContent] {
+    static func buildBlock(_ parts: XREntity...) -> [XREntity] {
         parts
     }
 }
 
-struct ARContainerView: View {
-    let content: [ARContent]
+struct XRScene: View {
+    let content: [XREntity]
     
-    init(@ARContentBuilder content: () -> [ARContent]) {
+    init(@ARContentBuilder content: () -> [XREntity]) {
         self.content = content()
     }
     
@@ -45,7 +54,7 @@ struct ARContainerView: View {
 
 struct ARContainerView_Previews: PreviewProvider {
     static var previews: some View {
-        ARContainerView {
+        XRScene {
             Model()
         }
     }
