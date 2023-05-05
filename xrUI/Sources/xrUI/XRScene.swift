@@ -7,64 +7,56 @@
 
 import SwiftUI
 
-protocol XREntity {
+public protocol XREntity {
     
 }
 
-protocol XRComponent {
+public protocol XRComponent {
     associatedtype Entity
     
     var thisEntity: Entity { get }
 }
 
-protocol ModelComponent: XRComponent {
+public protocol ModelComponent: XRComponent {
     func modelName() -> Entity
 }
 
-extension ModelComponent {
+public extension ModelComponent {
     func modelName() -> Entity  {
         return thisEntity
     }
 }
 
-struct Model: XREntity, ModelComponent {
-    var thisEntity: Model {
+public struct Model: XREntity, ModelComponent {
+    public var thisEntity: Model {
         return self
     }
     
-    typealias Entity = Model
+    public typealias Entity = Model
 }
 
 
 
 @resultBuilder
-struct ARContentBuilder {
+public struct ARContentBuilder {
     static func buildBlock(_ parts: XREntity...) -> [XREntity] {
         parts
     }
 }
 
-struct XRScene: View {
+public struct XRScene: View {
     let content: [XREntity]
     
-    init(@ARContentBuilder content: () -> [XREntity]) {
+    public init(@ARContentBuilder content: () -> [XREntity]) {
         self.content = content()
     }
     
-    var body: some View {
+    public var body: some View {
         VStack {
             
         }
         .padding()
         .background(Color.gray)
         .cornerRadius(10)
-    }
-}
-
-struct ARContainerView_Previews: PreviewProvider {
-    static var previews: some View {
-        XRScene {
-            Model()
-        }
     }
 }
