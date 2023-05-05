@@ -7,26 +7,35 @@
 
 import SwiftUI
 
-protocol XREntity: XRComponent {
-    var ThisEntity: XREntity {
-        get {
-            self
-        }
-    }
+protocol XREntity {
+    
 }
 
 protocol XRComponent {
-    var ThisEntity: XREntity { get }
+    associatedtype Entity
+    
+    var thisEntity: Entity { get }
 }
 
 protocol ModelComponent: XRComponent {
-    
-    func modelName() -> some XREntity {
-        return
+    func modelName() -> Entity
+}
+
+extension ModelComponent {
+    func modelName() -> Entity  {
+        return thisEntity
     }
 }
 
-struct Model: XREntity {}
+struct Model: XREntity, ModelComponent {
+    var thisEntity: Model {
+        return self
+    }
+    
+    typealias Entity = Model
+}
+
+
 
 @resultBuilder
 struct ARContentBuilder {
